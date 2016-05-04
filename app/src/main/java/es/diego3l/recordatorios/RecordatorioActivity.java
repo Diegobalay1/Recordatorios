@@ -8,24 +8,32 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 public class RecordatorioActivity extends AppCompatActivity {
+    private ListView miListaVista;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recordatorio);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        miListaVista = (ListView) findViewById(R.id.recordatorios_lista_view);
+        //El ArrayAdapter es el controlador o controller en nuestra
+        //relación con model-vista-controller. (controller)
+        ArrayAdapter<String> miArrayAdapter = new ArrayAdapter<String>(
+                //context
+                this,
+                //layout (view)
+                R.layout.recordatorio_fila,
+                //row (view)
+                R.id.fila_texto,
+                //data (model) con datos falsos para probar nuestra listview "miListaVista"
+                new String[]{"Primer recordatorio", "Segundo recordatorio", "Tercer recordatorio"}
+        );
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        miListaVista.setAdapter(miArrayAdapter);
+
     }
 
     @Override
