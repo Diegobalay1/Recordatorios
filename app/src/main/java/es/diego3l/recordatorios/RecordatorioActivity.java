@@ -1,5 +1,6 @@
 package es.diego3l.recordatorios;
 
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -14,27 +15,62 @@ import android.widget.ListView;
 
 public class RecordatorioActivity extends AppCompatActivity {
     private ListView miListaVista;
+    private AvisosDBAdapter mDbAdapter;
+    private AvisosSimpleCursorAdapter mCursorAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recordatorio);
         miListaVista = (ListView) findViewById(R.id.recordatorios_lista_view);
-        //El ArrayAdapter es el controlador o controller en nuestra
-        //relación con model-vista-controller. (controller)
-        ArrayAdapter<String> miArrayAdapter = new ArrayAdapter<String>(
+        findViewById(R.id.recordatorios_lista_view);
+        miListaVista.setDivider(null);
+        mDbAdapter = new AvisosDBAdapter(this);
+        mDbAdapter.abrir();
+
+
+        if (savedInstanceState == null) { //Comprueba si hay un estado salvado de la instancia
+            //limpiar todos los datos
+            mDbAdapter.borrarTodosLosRecordatorios();
+            //Añadir algunos datos
+            mDbAdapter.crearRecordatorio("Visitar el Centro de JC", true);
+            mDbAdapter.crearRecordatorio("Revisar código Orange", false);
+            mDbAdapter.crearRecordatorio("Revisar Currículum", false);
+            mDbAdapter.crearRecordatorio("Llamar o esperar esa llmada", true);
+            mDbAdapter.crearRecordatorio("La que se avecina Serie pendiente", false);
+        }
+
+
+        Cursor cursor = mDbAdapter.obtenerTodosLosRecordatorios();
+
+        //desde las columnas definidas en la base de datos
+        String[] from = new String[]{
+                AvisosDBAdapter.COL_CONTENIDO
+        };
+
+        //a la id de views en el layout
+        int[] to = new int[]{
+                R.id.fila_texto
+        };
+
+        mCursorAdapter = new AvisosSimpleCursorAdapter(
                 //context
-                this,
-                //layout (view)
+                RecordatorioActivity.this,
+                //el layout de la fila
                 R.layout.recordatorio_fila,
-                //row (view)
-                R.id.fila_texto,
-                //data (model) con datos falsos para probar nuestra listview "miListaVista"
-                new String[]{"Primer recordatorio", "Segundo recordatorio", "Tercer recordatorio"}
+                //cursor
+                cursor,
+                //desde columnas definidas en la base de datos
+                from,
+                //a las ids de vies en el layout
+                to,
+                //flag ~ no usado
+                0
         );
 
-        miListaVista.setAdapter(miArrayAdapter);
-
+        //el cursorAdapter (controller) está ahora actualizando la listView (view)
+        //con datos desde la base de datos (modelo)
+        miListaVista.setAdapter(mCursorAdapter);
     }
 
     @Override
