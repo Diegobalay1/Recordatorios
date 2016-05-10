@@ -1,5 +1,6 @@
 package es.diego3l.recordatorios;
-
+import android.app.Dialog;
+import android.support.v7.app.AlertDialog;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -10,8 +11,10 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 public class RecordatorioActivity extends AppCompatActivity {
     private ListView miListaVista;
@@ -29,7 +32,7 @@ public class RecordatorioActivity extends AppCompatActivity {
         mDbAdapter.abrir();
 
 
-        if (savedInstanceState == null) { //Comprueba si hay un estado salvado de la instancia
+        /*if (savedInstanceState == null) { //Comprueba si hay un estado salvado de la instancia
             //limpiar todos los datos
             mDbAdapter.borrarTodosLosRecordatorios();
             //Añadir algunos datos
@@ -38,7 +41,39 @@ public class RecordatorioActivity extends AppCompatActivity {
             mDbAdapter.crearRecordatorio("Revisar Currículum", false);
             mDbAdapter.crearRecordatorio("Llamar o esperar esa llmada", true);
             mDbAdapter.crearRecordatorio("La que se avecina Serie pendiente", false);
-        }
+
+        }*/
+
+        // cuando pulsamos un item individual en la  listview
+        miListaVista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            public void onItemClick(AdapterView<?> parent, View view, final int masterListPosition, long id) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(RecordatorioActivity.this);
+                ListView modeListView = new ListView(RecordatorioActivity.this);
+                String[] modes = new String[] { "Editar Aviso", "Borrar Aviso" };
+                ArrayAdapter<String> modeAdapter = new ArrayAdapter<>(RecordatorioActivity.this,
+                        android.R.layout.simple_list_item_1, android.R.id.text1, modes);
+                modeListView.setAdapter(modeAdapter);
+                builder.setView(modeListView);
+                final Dialog dialog = builder.create();
+                dialog.show();
+                modeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        //editar aviso
+                        if (position == 0) {
+                            Toast.makeText(RecordatorioActivity.this, "editar "
+                                    + masterListPosition, Toast.LENGTH_SHORT).show();
+                            //borrar aviso
+                        } else {
+                            Toast.makeText(RecordatorioActivity.this, "borrar "
+                                    + masterListPosition, Toast.LENGTH_SHORT).show();
+                        }
+                        dialog.dismiss();
+                    }
+                });
+            }
+        });
 
 
         Cursor cursor = mDbAdapter.obtenerTodosLosRecordatorios();
@@ -71,6 +106,8 @@ public class RecordatorioActivity extends AppCompatActivity {
         //el cursorAdapter (controller) está ahora actualizando la listView (view)
         //con datos desde la base de datos (modelo)
         miListaVista.setAdapter(mCursorAdapter);
+
+
     }
 
     @Override
