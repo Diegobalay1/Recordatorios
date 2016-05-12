@@ -8,4 +8,10 @@
     <color name="azul_oscuro">#090a39</color>
     <color name="gris_brown">#433d32</color>
     <color name="naranja">#f77008</color>
+    <color name="gris_claro">#bababa</color>
+    <color name="negro">#000000</color>
+    <color name="azul_neutro">#ff1118ff</color>
+    <color name="gris_oscuro">#181818</color>
+    <color name="blanco">#ffffff</color>
+    <color name="verde">#003300</color>
 </resources>
