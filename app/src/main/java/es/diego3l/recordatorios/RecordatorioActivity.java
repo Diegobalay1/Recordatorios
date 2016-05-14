@@ -2,6 +2,7 @@ package es.diego3l.recordatorios;
 import android.annotation.TargetApi;
 import android.app.Dialog;
 import android.os.Build;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -37,6 +38,12 @@ public class RecordatorioActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recordatorio);
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setDisplayShowHomeEnabled(true);
+        actionBar.setIcon(R.mipmap.ic_launcher);
+
         miListaVista = (ListView) findViewById(R.id.recordatorios_lista_view);
         findViewById(R.id.recordatorios_lista_view);
         miListaVista.setDivider(null);
@@ -76,7 +83,7 @@ public class RecordatorioActivity extends AppCompatActivity {
                         if (position == 0) {
                             int nId = getIdFromPosition(masterListPosition);
                             Aviso aviso = mDbAdapter.obtenerRecordatorioPorId(nId);
-                            fireCustomDialogo(aviso);
+                            fireCustomDialog(aviso);
                             //borrar aviso
                         } else {
                             mDbAdapter.borrarRecordatorioPorId(getIdFromPosition(masterListPosition));
@@ -169,7 +176,7 @@ public class RecordatorioActivity extends AppCompatActivity {
     }
 
 
-    private void fireCustomDialogo(final Aviso aviso){
+    private void fireCustomDialog(final Aviso aviso){
         // custom dialog
         final Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -231,7 +238,7 @@ public class RecordatorioActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.accion_nuevo:
                 //crear nuevo aviso
-                fireCustomDialogo(null);
+                fireCustomDialog(null);
                 return true;
             case R.id.accion_salir:
                 //Finalizar o salir
