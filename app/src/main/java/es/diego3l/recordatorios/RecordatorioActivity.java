@@ -1,6 +1,7 @@
 package es.diego3l.recordatorios;
 import android.annotation.TargetApi;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Build;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -9,6 +10,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.ActionMode;
@@ -67,10 +69,10 @@ public class RecordatorioActivity extends AppCompatActivity {
         miListaVista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             public void onItemClick(AdapterView<?> parent, View view, final int masterListPosition, long id) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(RecordatorioActivity.this);
+                final AlertDialog.Builder builder = new AlertDialog.Builder(RecordatorioActivity.this);
                 ListView modeListView = new ListView(RecordatorioActivity.this);
                 String[] modes = new String[]{"Editar Aviso", "Borrar Aviso"};
-                ArrayAdapter<String> modeAdapter = new ArrayAdapter<>(RecordatorioActivity.this,
+                final ArrayAdapter<String> modeAdapter = new ArrayAdapter<>(RecordatorioActivity.this,
                         android.R.layout.simple_list_item_1, android.R.id.text1, modes);
                 modeListView.setAdapter(modeAdapter);
                 builder.setView(modeListView);
@@ -174,6 +176,7 @@ public class RecordatorioActivity extends AppCompatActivity {
     private int getIdFromPosition(int nC) {
         return (int)mCursorAdapter.getItemId(nC);
     }
+
 
 
     private void fireCustomDialog(final Aviso aviso){
